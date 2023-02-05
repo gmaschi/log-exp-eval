@@ -1,0 +1,221 @@
+{
+	"info": {
+		"_postman_id": "6d4d9be5-fbfa-4ad4-97ee-77a805f93580",
+		"name": "nextron-challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18676466"
+	},
+	"item": [
+		{
+			"name": "exp-eval",
+			"item": [
+				{
+					"name": "create-exp",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"expression\": \"((x OR y) AND (z OR k) OR j)\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/v1/expressions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"expressions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-exp",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/expressions/659f9c60-9056-4ba2-ae12-bb70533d8671",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"expressions",
+								"659f9c60-9056-4ba2-ae12-bb70533d8671"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list-exp",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/expressions?page_id=1&page_size=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"expressions"
+							],
+							"query": [
+								{
+									"key": "page_id",
+									"value": "1"
+								},
+								{
+									"key": "page_size",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-exp",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/expressions/11625fa6-cb11-491d-97fa-089fa94d43b5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"expressions",
+								"11625fa6-cb11-491d-97fa-089fa94d43b5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eval-exp",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"expression\": \"((x OR y) AND (z OR k) OR j)\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/v1/evaluate/11625fa6-cb11-491d-97fa-089fa94d43b5?X=1&y=0&z=1&k=0&j=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"evaluate",
+								"11625fa6-cb11-491d-97fa-089fa94d43b5"
+							],
+							"query": [
+								{
+									"key": "X",
+									"value": "1"
+								},
+								{
+									"key": "y",
+									"value": "0"
+								},
+								{
+									"key": "z",
+									"value": "1"
+								},
+								{
+									"key": "k",
+									"value": "0"
+								},
+								{
+									"key": "j",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

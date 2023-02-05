@@ -1,0 +1,556 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "Documentation of the Logical Expression Evaluator API.",
+    "title": "Logical Expression Evaluator.",
+    "contact": {
+      "name": "Gustavo Maschi",
+      "email": "maschigustavo@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "host": "logical-expression-evaluator.com",
+  "basePath": "/",
+  "paths": {
+    "/v1/evaluate/{id}": {
+      "get": {
+        "security": [
+          {
+            "bearer-normal": []
+          }
+        ],
+        "description": "All parameters required by the given expression must be sent as query parameters to perform the evaluation. If at least one parameter is missing, an error will be returned to the user.\n\nThis route can only be used by authenticated users.",
+        "tags": [
+          "Expressions"
+        ],
+        "summary": "Evaluates an expression and returns its value.",
+        "operationId": "evaluateExpressionParams",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ID",
+            "description": "The ID of the expression.",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "X",
+            "description": "Some X variable parameter",
+            "name": "x",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "x-go-name": "Y",
+            "description": "Some Y variable parameter",
+            "name": "y",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/evaluateExpressionResponseWrapper"
+          },
+          "400": {
+            "$ref": "#/responses/evaluateExpressionBadRequest"
+          },
+          "401": {
+            "$ref": "#/responses/evaluateExpressionUnauthorized"
+          },
+          "500": {
+            "$ref": "#/responses/evaluateExpressionInternalServerError"
+          }
+        }
+      }
+    },
+    "/v1/expressions": {
+      "get": {
+        "security": [
+          {
+            "bearer-normal": []
+          }
+        ],
+        "description": "Pagination parameters shall be sent together to query paginated data or not sent at all to query all rows.\n\nThis route can only be used by authenticated users.",
+        "tags": [
+          "Expressions"
+        ],
+        "summary": "Retrieves a list of expressions.",
+        "operationId": "listExpressionsParams",
+        "parameters": [
+          {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64",
+            "x-go-name": "PageID",
+            "description": "The ID of the page to be returned. Min: 1.",
+            "name": "page_id",
+            "in": "query"
+          },
+          {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64",
+            "x-go-name": "PageSize",
+            "description": "The number of items per page to be retrieved. Min: 1.",
+            "name": "page_size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/listExpressionsResponseWrapper"
+          },
+          "400": {
+            "$ref": "#/responses/listExpressionsBadRequest"
+          },
+          "401": {
+            "$ref": "#/responses/listExpressionsUnauthorized"
+          },
+          "500": {
+            "$ref": "#/responses/listExpressionsInternalServerError"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "bearer-normal": []
+          }
+        ],
+        "description": "This route can only be used by authenticated users.",
+        "tags": [
+          "Expressions"
+        ],
+        "summary": "Creates an expression and returns the created expression to the user.",
+        "operationId": "createExpressionParams",
+        "parameters": [
+          {
+            "description": "The request body contains the required information to create an expression.",
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateExpressionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/responses/createExpressionResponseWrapper"
+          },
+          "400": {
+            "$ref": "#/responses/createExpressionBadRequest"
+          },
+          "401": {
+            "$ref": "#/responses/createExpressionUnauthorized"
+          },
+          "500": {
+            "$ref": "#/responses/createExpressionInternalServerError"
+          }
+        }
+      },
+      "patch": {
+        "security": [
+          {
+            "bearer-normal": []
+          }
+        ],
+        "description": "This route can only be used by authenticated users and a user can only retrieve expressions that he/she created.",
+        "tags": [
+          "Expressions"
+        ],
+        "summary": "Updates an expression and returns the updated expression to the user.",
+        "operationId": "updateExpressionParams",
+        "parameters": [
+          {
+            "description": "The request body contains the information to update an expression.",
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateExpressionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/updateExpressionResponseWrapper"
+          },
+          "400": {
+            "$ref": "#/responses/updateExpressionBadRequest"
+          },
+          "401": {
+            "$ref": "#/responses/updateExpressionUnauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/updateExpressionForbidden"
+          },
+          "500": {
+            "$ref": "#/responses/updateExpressionInternalServerError"
+          }
+        }
+      }
+    },
+    "/v1/expressions/{id}": {
+      "get": {
+        "security": [
+          {
+            "bearer-normal": []
+          }
+        ],
+        "description": "This route can only be used by authenticated users and a user can only retrieve expressions that he/she created.",
+        "tags": [
+          "Expressions"
+        ],
+        "summary": "Retrieves an expression.",
+        "operationId": "getExpressionParams",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ID",
+            "description": "The ID of the expression.",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/getExpressionResponseWrapper"
+          },
+          "400": {
+            "$ref": "#/responses/getExpressionBadRequest"
+          },
+          "401": {
+            "$ref": "#/responses/getExpressionUnauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/getExpressionForbidden"
+          },
+          "500": {
+            "$ref": "#/responses/getExpressionInternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "bearer-normal": []
+          }
+        ],
+        "description": "This route can only be used by authenticated users and a user can only delete expressions that he/she created.",
+        "tags": [
+          "Expressions"
+        ],
+        "summary": "Deletes an expression.",
+        "operationId": "deleteExpressionParams",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ID",
+            "description": "The ID of the expression.",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/responses/deleteExpressionResponseWrapper"
+          },
+          "400": {
+            "$ref": "#/responses/deleteExpressionBadRequest"
+          },
+          "401": {
+            "$ref": "#/responses/deleteExpressionUnauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/deleteExpressionForbidden"
+          },
+          "500": {
+            "$ref": "#/responses/deleteExpressionInternalServerError"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "CreateExpressionRequest": {
+      "type": "object",
+      "title": "CreateExpressionRequest describes the request to create an expression.",
+      "properties": {
+        "expression": {
+          "type": "string",
+          "x-go-name": "Expression"
+        }
+      },
+      "x-go-package": "github.com/gmaschi/log-exp-eval/internal/models/expressions"
+    },
+    "CreateExpressionResponse": {
+      "type": "object",
+      "title": "CreateExpressionResponse describes the response when creating an expression.",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "x-go-name": "CreatedAt"
+        },
+        "expression": {
+          "type": "string",
+          "x-go-name": "Expression"
+        },
+        "expressionID": {
+          "type": "string",
+          "format": "uuid",
+          "x-go-name": "ExpressionID"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "x-go-name": "UpdatedAt"
+        },
+        "username": {
+          "type": "string",
+          "x-go-name": "Username"
+        }
+      },
+      "x-go-package": "github.com/gmaschi/log-exp-eval/internal/models/expressions"
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "x-go-name": "Error"
+        }
+      },
+      "x-go-package": "github.com/gmaschi/log-exp-eval/internal/models/expressions/errors"
+    },
+    "UpdateExpressionRequest": {
+      "type": "object",
+      "title": "UpdateExpressionRequest describes the request to update an expression.",
+      "properties": {
+        "expression": {
+          "type": "string",
+          "x-go-name": "Expression"
+        },
+        "expression_id": {
+          "type": "string",
+          "x-go-name": "ExpressionID"
+        }
+      },
+      "x-go-package": "github.com/gmaschi/log-exp-eval/internal/models/expressions"
+    },
+    "UpdateExpressionResponse": {
+      "type": "object",
+      "title": "UpdateExpressionResponse describes the response when updating an expression.",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "x-go-name": "CreatedAt"
+        },
+        "expression": {
+          "type": "string",
+          "x-go-name": "Expression"
+        },
+        "expressionID": {
+          "type": "string",
+          "format": "uuid",
+          "x-go-name": "ExpressionID"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "x-go-name": "UpdatedAt"
+        },
+        "username": {
+          "type": "string",
+          "x-go-name": "Username"
+        }
+      },
+      "x-go-package": "github.com/gmaschi/log-exp-eval/internal/models/expressions"
+    }
+  },
+  "responses": {
+    "createExpressionBadRequest": {
+      "description": "Error response when the request body is not well formatted.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    },
+    "createExpressionInternalServerError": {
+      "description": "Error response when there is an internal server error.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    },
+    "createExpressionResponseWrapper": {
+      "description": "The response body contains the information of the created expression.",
+      "schema": {
+        "$ref": "#/definitions/CreateExpressionResponse"
+      }
+    },
+    "createExpressionUnauthorized": {
+      "description": "Error response when the user does not provide authorization information to perform the request.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    },
+    "deleteExpressionBadRequest": {
+      "description": "Error response when the request body is not well formatted.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    },
+    "deleteExpressionForbidden": {
+      "description": "Error response when the user didn't create the expression he/she is trying to retrieve.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    },
+    "deleteExpressionInternalServerError": {
+      "description": "Error response when there is an internal server error.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    },
+    "deleteExpressionResponseWrapper": {
+      "description": "The response body contains the information of the created expression."
+    },
+    "deleteExpressionUnauthorized": {
+      "description": "Error response when the user does not provide authorization information to perform the request.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    },
+    "evaluateExpressionBadRequest": {
+      "description": "Error response when the request body is not well formatted.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    },
+    "evaluateExpressionInternalServerError": {
+      "description": "Error response when there is an internal server error.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    },
+    "evaluateExpressionResponseWrapper": {
+      "description": "The response body contains the information of the created expression.",
+      "schema": {
+        "$ref": "#/definitions/CreateExpressionResponse"
+      }
+    },
+    "evaluateExpressionUnauthorized": {
+      "description": "Error response when the user does not provide authorization information to perform the request.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    },
+    "getExpressionBadRequest": {
+      "description": "Error response when the request body is not well formatted.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    },
+    "getExpressionForbidden": {
+      "description": "Error response when the user didn't create the expression he/she is trying to retrieve.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    },
+    "getExpressionInternalServerError": {
+      "description": "Error response when there is an internal server error.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    },
+    "getExpressionResponseWrapper": {
+      "description": "The response body contains the information of the created expression.",
+      "schema": {
+        "$ref": "#/definitions/CreateExpressionResponse"
+      }
+    },
+    "getExpressionUnauthorized": {
+      "description": "Error response when the user does not provide authorization information to perform the request.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    },
+    "listExpressionsBadRequest": {
+      "description": "Error response when the request body is not well formatted.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    },
+    "listExpressionsInternalServerError": {
+      "description": "Error response when there is an internal server error.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    },
+    "listExpressionsResponseWrapper": {
+      "description": "The response body contains the information of the created expression.",
+      "schema": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/CreateExpressionResponse"
+        }
+      }
+    },
+    "listExpressionsUnauthorized": {
+      "description": "Error response when the user does not provide authorization information to perform the request.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    },
+    "updateExpressionBadRequest": {
+      "description": "Error response when the request body is not well formatted.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    },
+    "updateExpressionForbidden": {
+      "description": "Error response when the user does not have ownership of the expression.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    },
+    "updateExpressionInternalServerError": {
+      "description": "Error response when there is an internal server error.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    },
+    "updateExpressionResponseWrapper": {
+      "description": "The response body contains the information of the created expression.",
+      "schema": {
+        "$ref": "#/definitions/UpdateExpressionResponse"
+      }
+    },
+    "updateExpressionUnauthorized": {
+      "description": "Error response when the user does not provide authorization information to perform the request.",
+      "schema": {
+        "$ref": "#/definitions/ErrorResponse"
+      }
+    }
+  },
+  "securityDefinitions": {
+    "bearer-normal": {
+      "type": "basic"
+    }
+  }
+}

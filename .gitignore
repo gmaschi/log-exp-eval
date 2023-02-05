@@ -1,0 +1,9 @@
+# IDEs configs
+.idea/
+
+# vendor
+vendor
+
+# envs
+.env
+.env.local

@@ -1,0 +1,38 @@
+version: "3.8"
+services:
+  database-test:
+    container_name: eval-database-test
+    build:
+      context: ../../../..
+      dockerfile: ./build/docker/database/db.Dockerfile
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: eval-test
+    ports:
+      - "5434:5432"
+    volumes:
+      - eval-data-test:/var/lib/postgresql/data
+  server-test:
+    container_name: eval-server-test
+    build:
+      context: ../../../..
+      dockerfile: ./build/docker/server/server.Dockerfile
+    environment:
+      DB_DRIVER: postgres
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: eval-test
+      POSTGRES_PORT: 5432
+      DB_HOST: database-test
+      DB_SOURCE: postgresql://myuser:mypassword@localhost:5432/eval-test?sslmode=disable
+      SERVER_ADDRESS: 0.0.0.0:8082
+    depends_on:
+      - database-test
+    networks:
+      - default
+    ports:
+      - "8082:8082"
+volumes:
+  eval-data-test:

@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+  database:
+    container_name: eval-database
+    build:
+      context: ../../..
+      dockerfile: ./build/docker/database/db.Dockerfile
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: eval
+    ports:
+      - "5432:5432"
+    volumes:
+      - eval-data:/var/lib/postgresql/data
+  server:
+    container_name: eval-server
+    build:
+      context: ../../..
+      dockerfile: ./build/docker/server/server.Dockerfile
+    environment:
+      DB_DRIVER: postgres
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: eval
+      POSTGRES_PORT: 5432
+      DB_HOST: database
+      DB_SOURCE: postgresql://myuser:mypassword@localhost:5432/eval?sslmode=disable
+      SERVER_ADDRESS: 0.0.0.0:8080
+      GIN_MODE: release
+    depends_on:
+      - database
+    networks:
+      - default
+    ports:
+      - "8080:8080"
+
+volumes:
+  eval-data:
