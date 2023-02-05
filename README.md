@@ -46,7 +46,6 @@ There are some important mentions regarding the challenge's requirements that ne
    1. GET `v1/expressions/{id}`: get expression by ID;
    2. DELETE `v1/expressions/{id}`: delete expression by ID;
    3. PATCH `v1/expressions`: updates an existing expression.
-4. a
 
 The API requires authentication for all endpoints. There are two mocked bearer tokens that can be used to run requests against the server:
 
